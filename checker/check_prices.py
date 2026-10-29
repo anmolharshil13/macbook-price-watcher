@@ -44,7 +44,12 @@ RETAILERS = {
     "croma": {"name": "Croma", "domains": ("croma.com",)},
     "vijaysales": {"name": "Vijay Sales", "domains": ("vijaysales.com",)},
     "reliance": {"name": "Reliance Digital", "domains": ("reliancedigital.in",)},
+    "imagine": {"name": "Imagine Online", "domains": ("imagineonline.store",)},
 }
+
+# Apple India part numbers for MacBook Air 13" M5 / 24GB / 1TB (any of these in a listing confirms the spec;
+# the 15" equivalents, e.g. MDVN4HN/A, are deliberately absent). Overridable via config "model_numbers".
+MODEL_NUMBERS = ["MDHG4HN/A", "MDHK4HN/A", "MDH94HN/A", "MDHD4HN/A"]  # Midnight, Sky Blue, Silver, Starlight
 
 PRICE_MIN, PRICE_MAX = 100_000, 400_000   # sanity band for this SKU (INR)
 MAX_HISTORY = 5000
@@ -155,8 +160,8 @@ def jsonld_products(page: str) -> list[dict]:
     return out
 
 
-def price_from_jsonld(page: str) -> tuple[float | None, str | None, str | None]:
-    """Return (price, title, availability) from the first Product with an offer price."""
+def price_from_jsonld(page: str) -> tuple[float | None, str | None, str | None, str]:
+    """Return (price, title, availability, sku/mpn) from the first Product with an offer price."""
     for prod in jsonld_products(page):
         offers = prod.get("offers")
         offers = offers if isinstance(offers, list) else [offers]
@@ -167,8 +172,9 @@ def price_from_jsonld(page: str) -> tuple[float | None, str | None, str | None]:
             if p is None and isinstance(off.get("priceSpecification"), dict):
                 p = parse_price(off["priceSpecification"].get("price"))
             if p:
-                return p, prod.get("name"), str(off.get("availability") or "")
-    return None, None, None
+                sku = " ".join(str(prod.get(k) or "") for k in ("sku", "mpn", "model"))
+                return p, prod.get("name"), str(off.get("availability") or ""), sku
+    return None, None, None, ""
 
 
 def meta(page: str, key: str) -> str | None:
@@ -231,7 +237,7 @@ def croma_api_price(url: str) -> float | None:
 
 def extract(retailer: str, url: str, page: str) -> dict:
     """Return {price, title, availability, source}. Never raises."""
-    price, title, avail = price_from_jsonld(page)
+    price, title, avail, sku = price_from_jsonld(page)
     source = "json-ld" if price else None
     if not price:
         p = parse_price(meta(page, "product:price:amount") or meta(page, "og:price:amount") or meta(page, "price"))
@@ -252,13 +258,18 @@ def extract(retailer: str, url: str, page: str) -> dict:
         "title": title or page_title(page),
         "availability": avail or meta(page, "product:availability") or "",
         "source": source,
+        "sku": sku,
     }
 
 
 # -------------------------------------------------------------- verification
 
-def spec_problems(text: str) -> list[str]:
-    """Which of the required spec tokens are missing from title/URL text."""
+def spec_problems(text: str, models=MODEL_NUMBERS) -> list[str]:
+    """Which of the required spec tokens are missing from title/URL/SKU text.
+    A known part number (MDHG4HN/A …) confirms the exact config on its own."""
+    compact = re.sub(r"[^a-z0-9]", "", text.lower())
+    if any(re.sub(r"[^a-z0-9]", "", m.lower()) in compact for m in models):
+        return []
     t = text.lower().replace("-", " ")
     missing = []
     if not re.search(r"\bm5\b", t):
@@ -274,7 +285,7 @@ def spec_problems(text: str) -> list[str]:
     return missing
 
 
-def verify(retailer: str, url: str, status: int, page: str, ex: dict) -> tuple[str, str]:
+def verify(retailer: str, url: str, status: int, page: str, ex: dict, models=MODEL_NUMBERS) -> tuple[str, str]:
     """Return (status_code, note). status_code 'verified' is the only alertable one."""
     low = page[:300_000].lower()
     if status == 0:
@@ -287,7 +298,7 @@ def verify(retailer: str, url: str, status: int, page: str, ex: dict) -> tuple[s
         return "no_price", "Page loaded but no price found"
     if not (PRICE_MIN <= ex["price"] <= PRICE_MAX):
         return "suspicious", f"Price ₹{ex['price']:,.0f} outside sane range"
-    missing = spec_problems(f"{ex['title'] or ''} {url}")
+    missing = spec_problems(f"{ex['title'] or ''} {ex.get('sku') or ''} {url}", models)
     if missing:
         return "spec_mismatch", "Listing doesn't confirm: " + ", ".join(missing)
     avail = (ex["availability"] or "").lower()
@@ -373,6 +384,7 @@ def run() -> int:
 
     config = load_json(CONFIG_PATH, {})
     target = float(config.get("target_price", 185000))
+    models = config.get("model_numbers") or MODEL_NUMBERS
     urls = {k: (v or "").strip() for k, v in (config.get("urls") or {}).items()}
     history = load_json(HISTORY_PATH, {"last_run": None, "checks": []})
     alerts = load_json(ALERTS_PATH, [])
@@ -386,7 +398,7 @@ def run() -> int:
             time.sleep(random.uniform(3, 8))   # be polite; also looks less bot-like
         status, final, page = fetch(url)
         ex = extract(rid, final, page) if status else {"price": None, "title": None, "availability": "", "source": None}
-        code, note = verify(rid, url, status, page, ex)
+        code, note = verify(rid, url, status, page, ex, models)
         rec = {
             "ts": now_iso(), "retailer": rid, "url": url, "status": code,
             "verified": code == "verified",

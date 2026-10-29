@@ -1,11 +1,13 @@
 {
   "product": "Apple MacBook Air M5, 13-inch, 24GB RAM, 1TB SSD",
   "target_price": 185000,
+  "model_numbers": ["MDHG4HN/A", "MDHK4HN/A", "MDH94HN/A", "MDHD4HN/A"],
   "urls": {
-    "amazon": "",
-    "flipkart": "",
-    "croma": "",
-    "vijaysales": "",
-    "reliance": ""
+    "amazon": "https://www.amazon.in/dp/B0GR1C18B7",
+    "flipkart": "https://www.flipkart.com/apple-macbook-air-m5-2026-m5-24-gb-1-tb-ssd-tahoe-mdhk4hn-a/p/itm81706d46d2612?pid=COMHZQX4GRPZZEU3",
+    "croma": "https://www.croma.com/apple-macbook-air-13-6-inch-m5-24gb-1tb-macos-tahoe-silver-/p/324325",
+    "vijaysales": "https://www.vijaysales.com/p/258895/apple-macbook-air-m5-chip-24gb-ram-1tb-ssd-13-liquid-retina-display-10-core-cpu-and-10-core-gpu-midnight-mdhg4hn-a",
+    "reliance": "https://www.reliancedigital.in/product/apple-mdhg4hna-macbook-air-13-10-core-apple-m5-chip24-gb1-tb-ssdmac-osliquid-retina-3446-cm-136-inch-midnight-mmc4s7-9969394",
+    "imagine": "https://www.imagineonline.store/products/13-inch-macbook-air-mdhk4hn-a"
   }
 }

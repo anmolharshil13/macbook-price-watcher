@@ -1,7 +1,7 @@
 # MacBook Price Watcher India
 
 Tracks **Apple MacBook Air M5 · 13-inch · 24GB · 1TB** across Amazon India, Flipkart, Croma,
-Vijay Sales and Reliance Digital, and pushes alerts to your iPhone. Target: **₹1,85,000**.
+Vijay Sales, Reliance Digital and Imagine Online, and pushes alerts to your iPhone. Target: **₹1,85,000**.
 
 ## How it works
 
@@ -23,7 +23,7 @@ Vijay Sales and Reliance Digital, and pushes alerts to your iPhone. Target: **�
   to `data/`, GitHub Pages serves the app, ntfy delivers the push.
 * **Only verified prices alert.** A check counts as verified only if the page loaded (not a
   captcha/block page), a price was found in structured data or a known price element, it is
-  between ₹1,00,000 and ₹4,00,000, the listing title confirms **M5 + 13″ + 24GB + 1TB + MacBook Air**,
+  between ₹1,00,000 and ₹4,00,000, the listing confirms **M5 + 13″ + 24GB + 1TB + MacBook Air** (or names one of the four Apple part numbers for that exact config — `model_numbers` in `data/config.json`),
   and it isn't marked out of stock. Everything else is recorded with a reason but never alerts.
 * **Alerts** (each sent once, at the moment it happens):
   * 📉 **Price drop** — verified price is lower than that retailer's previous verified price.

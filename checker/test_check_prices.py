@@ -54,6 +54,16 @@ class Verification(unittest.TestCase):
         self.assertEqual(self.check("<html>Enter the characters you see below - captcha</html>", status=200), "blocked")
         self.assertEqual(self.check("", status=503), "blocked")
 
+    def test_model_number_confirms_spec(self):
+        # Flipkart / Imagine titles omit the screen size or RAM but carry the Apple part number
+        self.assertEqual(self.check(jsonld("209900", name="Apple MacBook Air (M5, 2026) M5 - (24 GB/1 TB SSD/Tahoe) MDHK4HN/A")), "verified")
+        self.assertEqual(self.check(jsonld("188910", name="13-inch MacBook Air: Apple M5 chip, 1TB SSD - Sky Blue"),
+                                    url="https://www.imagineonline.store/products/13-inch-macbook-air-mdhk4hn-a"), "verified")
+
+    def test_15_inch_rejected(self):
+        page = jsonld("223100", name="Apple MDVN4HN/A MacBook Air (Apple M5 Chip/24 GB/1 TB SSD), 38.91 cm (15.3 inch), Midnight")
+        self.assertEqual(self.check(page), "spec_mismatch")
+
     def test_absurd_price(self):
         self.assertEqual(self.check(jsonld("18990")), "suspicious")
 

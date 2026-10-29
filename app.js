@@ -9,6 +9,7 @@ const RETAILERS = [
   { id: "croma",      name: "Croma",            domains: ["croma.com"] },
   { id: "vijaysales", name: "Vijay Sales",      domains: ["vijaysales.com"] },
   { id: "reliance",   name: "Reliance Digital", domains: ["reliancedigital.in"] },
+  { id: "imagine",    name: "Imagine Online",   domains: ["imagineonline.store"] },
 ];
 const BY_ID = Object.fromEntries(RETAILERS.map(r => [r.id, r]));
 const WORKFLOW = "check-prices.yml";
