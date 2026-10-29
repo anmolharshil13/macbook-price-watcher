@@ -10,6 +10,10 @@ on:
         description: "Only send a test notification to the iPhone"
         type: boolean
         default: false
+      debug:
+        description: "Save pages that didn't verify as a downloadable artifact"
+        type: boolean
+        default: false
   push:
     paths: ["data/config.json"]   # re-check right after you change a URL in the app
 
@@ -42,7 +46,16 @@ jobs:
           NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
           TEST_PUSH: ${{ inputs.test_push == true && 'true' || 'false' }}
           PYTHONIOENCODING: utf-8
+          DEBUG_DUMP: ${{ inputs.debug == true && 'debug-pages' || '' }}
         run: python checker/check_prices.py
+
+      - name: Upload debug pages
+        if: ${{ inputs.debug == true }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-pages
+          path: debug-pages/
+          retention-days: 3
 
       - name: Save results
         if: ${{ inputs.test_push != true }}

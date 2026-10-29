@@ -15,6 +15,7 @@ Env:
   NTFY_SERVER  default https://ntfy.sh
   NTFY_TOKEN   optional access token for a protected topic
   TEST_PUSH    "true" -> send one test notification and exit
+  DEBUG_DUMP   directory -> save pages that didn't verify (for fixing extractors)
 """
 from __future__ import annotations
 
@@ -397,6 +398,9 @@ def run() -> int:
         if i:
             time.sleep(random.uniform(3, 8))   # be polite; also looks less bot-like
         status, final, page = fetch(url)
+        if status == 0 and "timed out" in page:   # slow 1-2 MB pages (Flipkart) - one patient retry
+            time.sleep(5)
+            status, final, page = fetch(url, timeout=60)
         ex = extract(rid, final, page) if status else {"price": None, "title": None, "availability": "", "source": None}
         code, note = verify(rid, url, status, page, ex, models)
         rec = {
@@ -405,6 +409,9 @@ def run() -> int:
             "price": ex["price"] if code in ("verified", "out_of_stock", "spec_mismatch") else None,
             "title": (ex["title"] or "")[:200], "note": note,
         }
+        if code != "verified" and os.environ.get("DEBUG_DUMP"):
+            Path(os.environ["DEBUG_DUMP"]).mkdir(parents=True, exist_ok=True)
+            (Path(os.environ["DEBUG_DUMP"]) / f"{rid}.html").write_text(page, encoding="utf-8")
         mine = [c for c in checks if c["retailer"] == rid]
         prev_verified = next((c for c in reversed(mine) if c.get("verified")), None)
         print(f"- {name}: {code} {fmt_inr(rec['price']) if rec['price'] else ''} ({note})")
