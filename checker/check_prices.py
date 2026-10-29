@@ -150,7 +150,7 @@ def jsonld_products(page: str) -> list[dict]:
     for m in re.finditer(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>',
                          page, re.S | re.I):
         try:
-            data = json.loads(m.group(1).strip())
+            data = json.loads(m.group(1).strip(), strict=False)   # Croma embeds raw newlines in strings
         except json.JSONDecodeError:
             continue
         for node in _walk_jsonld(data):
@@ -211,7 +211,7 @@ RETAILER_PATTERNS = {
         ("flipkart:priceClass", r'class=["\'](?:Nx9bqj[^"\']*|_30jeq3[^"\']*)["\'][^>]*>\s*(?:₹|&#8377;)?\s*([\d,]+)'),
     ],
     "croma": [
-        ("croma:sellingPrice", r'"sellingPrice(?:Value)?"\s*:\s*"?(?:₹)?([\d,.]+)'),
+        ("croma:sellingPrice", r'"sellingPrice(?:Value)?"\s*:\s*(?:\{\s*"value"\s*:\s*)?"?(?:₹)?([\d,.]+)'),
         ("croma:amount", r'class=["\']amount["\'][^>]*>\s*(?:₹|&#8377;)?\s*([\d,]+)'),
     ],
     "vijaysales": [

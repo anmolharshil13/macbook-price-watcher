@@ -30,6 +30,16 @@ class Extraction(unittest.TestCase):
         page = f'<title>{TITLE}</title><div class="Nx9bqj CxhGGd">₹1,84,990</div>'
         self.assertEqual(cp.extract("flipkart", "https://www.flipkart.com/x/p/itm1", page)["price"], 184990.0)
 
+    def test_croma_jsonld_with_raw_newlines(self):
+        page = ('<script type="application/ld+json">{"@type":"Product","name":"Apple MacBook Air (13.6 inch, M5, 24GB, 1TB)",'
+                '"description":"<p>line one<br />\nline two</p>","offers":{"price":"195490.00"}}</script>')
+        ex = cp.extract("croma", "https://www.croma.com/x/p/324325", page)
+        self.assertEqual((ex["price"], ex["source"]), (195490.0, "json-ld"))
+
+    def test_croma_price_reducer(self):
+        page = '"pdpPriceReducer":{"pdpPriceData":{"sellingPrice":{"value":"195490.00"},"mrp":{"value":"209900.00"}}}'
+        self.assertEqual(cp.extract("croma", "https://www.croma.com/x/p/324325", page)["price"], 195490.0)
+
     def test_parse_price(self):
         self.assertEqual(cp.parse_price("₹1,89,900.00"), 189900.0)
         self.assertIsNone(cp.parse_price("call for price"))
