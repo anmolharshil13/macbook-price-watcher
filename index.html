@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>MacBook Price Watcher</title>
+  <meta name="description" content="Tracks the MacBook Air M5 13-inch 24GB/1TB across Indian retailers.">
+  <meta name="theme-color" content="#f4f4f2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Price Watch">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" type="image/png" href="icons/icon-180.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Price Watcher</h1>
+      <p class="sub">MacBook Air M5 · 13″ · 24GB · 1TB</p>
+    </div>
+    <button id="refresh" class="icon-btn" aria-label="Refresh">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <!-- ======================= PRICES ======================= -->
+    <section id="tab-prices" class="tab active" aria-label="Prices">
+      <div id="hero" class="card hero"></div>
+      <h2 class="section-title">Retailers</h2>
+      <div id="retailers" class="stack"></div>
+      <p id="last-run" class="foot"></p>
+    </section>
+
+    <!-- ======================= HISTORY ======================= -->
+    <section id="tab-history" class="tab" aria-label="Price history">
+      <div class="card">
+        <div class="row between">
+          <h2 class="card-title">Verified price history</h2>
+          <div class="seg" role="group" aria-label="Time range">
+            <button data-range="7" class="on">7D</button>
+            <button data-range="30">30D</button>
+            <button data-range="0">All</button>
+          </div>
+        </div>
+        <div class="chart-box"><canvas id="chart" aria-label="Price history chart" role="img"></canvas></div>
+        <div id="chart-empty" class="empty hidden">No verified prices yet. They'll appear after the first cloud check.</div>
+      </div>
+      <div class="card">
+        <h2 class="card-title">Recent checks</h2>
+        <div class="table-wrap"><table id="checks-table"><thead><tr><th>When (IST)</th><th>Retailer</th><th class="num">Price</th><th>Result</th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ======================= ALERTS ======================= -->
+    <section id="tab-alerts" class="tab" aria-label="Alerts">
+      <div id="alerts" class="stack"></div>
+    </section>
+
+    <!-- ======================= SETTINGS ======================= -->
+    <section id="tab-settings" class="tab" aria-label="Settings">
+      <form id="settings-form" class="stack" novalidate>
+        <div class="card">
+          <h2 class="card-title">Product links</h2>
+          <p class="hint">Paste the exact listing for <b>M5 · 13″ · 24GB · 1TB</b>. A price is only “verified” when the listing title confirms all four.</p>
+          <div id="url-fields"></div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Target price</h2>
+          <label class="field">
+            <span>Alert me at or below (₹)</span>
+            <input id="target" type="number" inputmode="numeric" min="50000" step="500" required>
+          </label>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Cloud connection</h2>
+          <p class="hint">Saving writes your links to the GitHub repo that runs the scheduled checks. The token stays on this iPhone only.</p>
+          <div class="grid2">
+            <label class="field"><span>GitHub owner</span><input id="gh-owner" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+            <label class="field"><span>Repository</span><input id="gh-repo" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+          </div>
+          <label class="field"><span>Branch</span><input id="gh-branch" value="main" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
+          <label class="field"><span>Access token (fine-grained, this repo only)</span><input id="gh-token" type="password" autocomplete="off" placeholder="github_pat_…"></label>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn primary" id="save">Save &amp; check now</button>
+          <div class="row gap">
+            <button type="button" class="btn" id="run-now">Run check</button>
+            <button type="button" class="btn" id="test-push">Test push</button>
+          </div>
+          <button type="button" class="btn ghost" id="copy-config">Copy config JSON</button>
+          <p id="settings-msg" class="msg" role="status" aria-live="polite"></p>
+        </div>
+
+        <details class="card">
+          <summary>iPhone notifications setup (ntfy)</summary>
+          <ol class="steps">
+            <li>Install <b>ntfy</b> from the App Store and allow notifications.</li>
+            <li>Tap <b>+</b> and subscribe to a long, random topic name (e.g. <code>mbp-watch-7f3k9q2x</code>). Anyone who knows it can read it.</li>
+            <li>In the GitHub repo: Settings → Secrets and variables → Actions → New secret <code>NTFY_TOPIC</code> = that name.</li>
+            <li>Tap <b>Test push</b> above. You should get a notification within a minute.</li>
+          </ol>
+        </details>
+      </form>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="Sections">
+    <button data-tab="prices" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v10H4zM2 19h20" /></svg><span>Prices</span></button>
+    <button data-tab="history"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 16l4-5 4 3 6-8" /></svg><span>History</span></button>
+    <button data-tab="alerts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4" /></svg><span>Alerts</span><i id="alert-badge" class="badge hidden"></i></button>
+    <button data-tab="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" /><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span>Settings</span></button>
+  </nav>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
