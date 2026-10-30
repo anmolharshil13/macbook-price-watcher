@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "type": "health",
+    "title": "Checker needs attention",
+    "message": "Vijay Sales: last 4 checks unverified (Listed as out of stock). Check the URL in Settings.",
+    "retailer": "vijaysales",
+    "url": "https://www.vijaysales.com/p/258895/apple-macbook-air-m5-chip-24gb-ram-1tb-ssd-13-liquid-retina-display-10-core-cpu-and-10-core-gpu-midnight-mdhg4hn-a",
+    "ts": "2026-10-30T01:00:30+00:00"
+  },
+  {
+    "type": "health",
+    "title": "Checker needs attention",
+    "message": "Reliance Digital: last 4 checks unverified (HTTP 403: retailer blocked the cloud checker). Check the URL in Settings.",
+    "retailer": "reliance",
+    "url": "https://www.reliancedigital.in/product/apple-mdhg4hna-macbook-air-13-10-core-apple-m5-chip24-gb1-tb-ssdmac-osliquid-retina-3446-cm-136-inch-midnight-mmc4s7-9969394",
+    "ts": "2026-10-30T01:00:36+00:00"
+  }
+]
