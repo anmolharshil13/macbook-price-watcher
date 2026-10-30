@@ -1,5 +1,5 @@
 {
-  "last_run": "2026-10-30T10:02:11+00:00",
+  "last_run": "2026-10-30T18:01:01+00:00",
   "checks": [
     {
       "ts": "2026-10-29T19:01:45+00:00",
@@ -293,6 +293,66 @@
     },
     {
       "ts": "2026-10-30T10:02:11+00:00",
+      "retailer": "imagine",
+      "url": "https://www.imagineonline.store/products/13-inch-macbook-air-mdhk4hn-a",
+      "status": "verified",
+      "verified": true,
+      "price": 209900.0,
+      "title": "13-inch MacBook Air: Apple M5 chip with 10-core CPU and 10-core GPU, 1TB SSD - Sky Blue",
+      "note": "via json-ld"
+    },
+    {
+      "ts": "2026-10-30T18:00:23+00:00",
+      "retailer": "amazon",
+      "url": "https://www.amazon.in/dp/B0GR1C18B7",
+      "status": "blocked",
+      "verified": false,
+      "price": null,
+      "title": "503 - Service Unavailable Error",
+      "note": "HTTP 503: retailer blocked the cloud checker"
+    },
+    {
+      "ts": "2026-10-30T18:00:29+00:00",
+      "retailer": "flipkart",
+      "url": "https://www.flipkart.com/apple-macbook-air-m5-2026-m5-24-gb-1-tb-ssd-tahoe-mdhk4hn-a/p/itm81706d46d2612?pid=COMHZQX4GRPZZEU3",
+      "status": "verified",
+      "verified": true,
+      "price": 209900.0,
+      "title": "Apple MacBook Air (M5, 2026) M5 - (24 GB/1 TB SSD/Tahoe) MDHK4HN/A",
+      "note": "via json-ld"
+    },
+    {
+      "ts": "2026-10-30T18:00:34+00:00",
+      "retailer": "croma",
+      "url": "https://www.croma.com/apple-macbook-air-13-6-inch-m5-24gb-1tb-macos-tahoe-silver-/p/324325",
+      "status": "verified",
+      "verified": true,
+      "price": 195490.0,
+      "title": "Buy Apple MacBook Air (13.6 inch, M5, 24GB, 1TB, macOS Tahoe, Silver) Online - Croma",
+      "note": "via croma:sellingPrice"
+    },
+    {
+      "ts": "2026-10-30T18:00:46+00:00",
+      "retailer": "vijaysales",
+      "url": "https://www.vijaysales.com/p/258895/apple-macbook-air-m5-chip-24gb-ram-1tb-ssd-13-liquid-retina-display-10-core-cpu-and-10-core-gpu-midnight-mdhg4hn-a",
+      "status": "out_of_stock",
+      "verified": false,
+      "price": 188890.0,
+      "title": "Apple MacBook Air M5 Chip (24GB RAM/ 1TB SSD/ 13\\ Liquid Retina Display/ 10 core CPU and 10 core GPU/ Midnight) - MDHG4HN/A",
+      "note": "Listed as out of stock"
+    },
+    {
+      "ts": "2026-10-30T18:00:54+00:00",
+      "retailer": "reliance",
+      "url": "https://www.reliancedigital.in/product/apple-mdhg4hna-macbook-air-13-10-core-apple-m5-chip24-gb1-tb-ssdmac-osliquid-retina-3446-cm-136-inch-midnight-mmc4s7-9969394",
+      "status": "blocked",
+      "verified": false,
+      "price": null,
+      "title": "Access Denied",
+      "note": "HTTP 403: retailer blocked the cloud checker"
+    },
+    {
+      "ts": "2026-10-30T18:01:01+00:00",
       "retailer": "imagine",
       "url": "https://www.imagineonline.store/products/13-inch-macbook-air-mdhk4hn-a",
       "status": "verified",
