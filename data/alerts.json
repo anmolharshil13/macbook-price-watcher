@@ -30,5 +30,16 @@
     "retailer": "amazon",
     "url": "https://www.amazon.in/dp/B0GR1C18B7",
     "ts": "2026-11-03T23:23:55+00:00"
+  },
+  {
+    "type": "drop",
+    "title": "📉 Price drop",
+    "message": "Croma: ₹1,95,490 → ₹1,92,990 (−₹2,500) · ₹7,990 above target",
+    "priority": 4,
+    "retailer": "croma",
+    "price": 192990.0,
+    "previous": 195490.0,
+    "url": "https://www.croma.com/apple-macbook-air-13-6-inch-m5-24gb-1tb-macos-tahoe-silver-/p/324325",
+    "ts": "2026-11-18T00:57:40+00:00"
   }
 ]
