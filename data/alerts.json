@@ -41,5 +41,13 @@
     "previous": 195490.0,
     "url": "https://www.croma.com/apple-macbook-air-13-6-inch-m5-24gb-1tb-macos-tahoe-silver-/p/324325",
     "ts": "2026-11-18T00:57:40+00:00"
+  },
+  {
+    "type": "health",
+    "title": "Checker needs attention",
+    "message": "Amazon India: last 4 checks unverified (HTTP 503: retailer blocked the cloud checker). Check the URL in Settings.",
+    "retailer": "amazon",
+    "url": "https://www.amazon.in/dp/B0GR1C18B7",
+    "ts": "2026-11-19T02:34:17+00:00"
   }
 ]
