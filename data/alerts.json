@@ -60,5 +60,13 @@
     "previous": 209900.0,
     "url": "https://www.flipkart.com/apple-macbook-air-m5-2026-m5-24-gb-1-tb-ssd-tahoe-mdhk4hn-a/p/itm81706d46d2612?pid=COMHZQX4GRPZZEU3",
     "ts": "2026-11-24T13:43:19+00:00"
+  },
+  {
+    "type": "health",
+    "title": "Checker needs attention",
+    "message": "Amazon India: last 4 checks unverified (HTTP 503: retailer blocked the cloud checker). Check the URL in Settings.",
+    "retailer": "amazon",
+    "url": "https://www.amazon.in/dp/B0GR1C18B7",
+    "ts": "2026-11-25T19:16:05+00:00"
   }
 ]
